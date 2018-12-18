@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Animation/AnimBlueprint.h"
+#include "Interface_Interact.h"
 #include "Char_Player.generated.h"
 
 UCLASS()
@@ -32,4 +33,14 @@ public:
 	void Input_LookX(float);
 	void Input_LookY(float);
 	void Input_JumpPressed();
+	void Input_UsePressed();
+	void Input_UpPressed();
+	void Input_DownPressed();
+	void Input_LeftPressed();
+	void Input_LeftReleased();
+	void Input_RightPressed();
+	void Input_RightReleased();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Interact(int iState);
 };

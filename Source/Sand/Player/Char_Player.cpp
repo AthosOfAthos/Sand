@@ -48,6 +48,13 @@ void AChar_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("Axis_LookY", this, &AChar_Player::Input_LookY);
 
 	PlayerInputComponent->BindAction("Key_Jump", IE_Pressed, this, &AChar_Player::Input_JumpPressed);
+	PlayerInputComponent->BindAction("Key_Use", IE_Pressed, this, &AChar_Player::Input_UsePressed);
+	PlayerInputComponent->BindAction("Key_Up", IE_Pressed, this, &AChar_Player::Input_UpPressed);
+	PlayerInputComponent->BindAction("Key_Down", IE_Pressed, this, &AChar_Player::Input_DownPressed);
+	PlayerInputComponent->BindAction("Key_Left", IE_Pressed, this, &AChar_Player::Input_LeftPressed);
+	PlayerInputComponent->BindAction("Key_Left", IE_Released, this, &AChar_Player::Input_LeftReleased);
+	PlayerInputComponent->BindAction("Key_Right", IE_Pressed, this, &AChar_Player::Input_RightPressed);
+	PlayerInputComponent->BindAction("Key_Right", IE_Released, this, &AChar_Player::Input_RightReleased);
 }
 
 void AChar_Player::Input_MoveX(float fValue)
@@ -79,4 +86,61 @@ void AChar_Player::Input_LookY(float fValue)
 void AChar_Player::Input_JumpPressed()
 {
 	ACharacter::Jump();
+}
+
+void AChar_Player::Input_UsePressed()
+{
+	Interact(0);
+}
+
+void AChar_Player::Input_UpPressed()
+{
+
+}
+
+void AChar_Player::Input_DownPressed()
+{
+
+}
+
+void AChar_Player::Input_LeftPressed()
+{
+
+}
+
+void AChar_Player::Input_LeftReleased()
+{
+
+}
+
+void AChar_Player::Input_RightPressed()
+{
+
+}
+
+void AChar_Player::Input_RightReleased()
+{
+
+}
+
+bool AChar_Player::Interact_Validate(int iState)
+{
+	return true;
+}
+
+void AChar_Player::Interact_Implementation(int iState)
+{
+	FHitResult Hit;
+	FVector EndLocation = FVector(250, 0, 0);
+	EndLocation = GetControlRotation().RotateVector(EndLocation);
+	EndLocation += GetActorLocation();
+	FCollisionQueryParams params = FCollisionQueryParams(false);
+	if (GetWorld()->LineTraceSingleByChannel(Hit, GetActorLocation(), EndLocation, ECC_WorldDynamic, params))
+	{
+		Destroy();
+		if (Hit.Actor->GetClass()->ImplementsInterface(UInterface_Interact::StaticClass()))
+		{
+			Cast<IInterface_Interact>(Hit.Actor)->Interact_Use();
+		}
+	}
 }
