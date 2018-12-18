@@ -4,6 +4,8 @@
 
 #include "Engine.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Animation/AnimBlueprint.h"
 #include "Char_Player.generated.h"
 
 UCLASS()
