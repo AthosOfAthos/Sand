@@ -9,7 +9,7 @@ AChar_Player::AChar_Player()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	bReplicateMovement = true;
-
+	GetCapsuleComponent()->SetCollisionProfileName("Player");
 	//Setup skeletal mesh
 	GetMesh()->SetSkeletalMesh(LoadObject<USkeletalMesh>(NULL, TEXT("/Game/AnimStarterPack/UE4_Mannequin/Mesh/SK_Mannequin.SK_Mannequin")));
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
