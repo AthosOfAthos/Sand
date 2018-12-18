@@ -5,11 +5,15 @@
 // Sets default values
 AChar_Player::AChar_Player()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	//set flags
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	bReplicateMovement = true;
+	//Collision
 	GetCapsuleComponent()->SetCollisionProfileName("Player");
+	//Movement
+	GetCharacterMovement()->JumpZVelocity = 1000;
+	GetCharacterMovement()->GravityScale = 3;
 	//Setup skeletal mesh
 	GetMesh()->SetSkeletalMesh(LoadObject<USkeletalMesh>(NULL, TEXT("/Game/AnimStarterPack/UE4_Mannequin/Mesh/SK_Mannequin.SK_Mannequin")));
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
@@ -42,6 +46,8 @@ void AChar_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("Axis_MoveY", this, &AChar_Player::Input_MoveY);
 	PlayerInputComponent->BindAxis("Axis_LookX", this, &AChar_Player::Input_LookX);
 	PlayerInputComponent->BindAxis("Axis_LookY", this, &AChar_Player::Input_LookY);
+
+	PlayerInputComponent->BindAction("Key_Jump", IE_Pressed, this, &AChar_Player::Input_JumpPressed);
 }
 
 void AChar_Player::Input_MoveX(float fValue)
@@ -68,4 +74,9 @@ void AChar_Player::Input_LookX(float fValue)
 void AChar_Player::Input_LookY(float fValue)
 {
 	AddControllerPitchInput(fValue);
+}
+
+void AChar_Player::Input_JumpPressed()
+{
+	ACharacter::Jump();
 }

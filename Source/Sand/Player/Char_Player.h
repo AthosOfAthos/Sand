@@ -31,4 +31,5 @@ public:
 	void Input_MoveY(float);
 	void Input_LookX(float);
 	void Input_LookY(float);
+	void Input_JumpPressed();
 };
