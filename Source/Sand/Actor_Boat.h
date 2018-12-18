@@ -11,8 +11,8 @@ UCLASS()
 class SAND_API AActor_Boat : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AActor_Boat();
 
@@ -20,8 +20,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+private:
+	FVector velocity;
+	FVector acceleration;
+	FVector n_position;
+	FRotator orientation;
+	int mass;
+	float drag;
+	float angularDrag;
+	int elasticity;
 
 };

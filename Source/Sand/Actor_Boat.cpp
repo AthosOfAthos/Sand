@@ -11,6 +11,15 @@ AActor_Boat::AActor_Boat()
 	bReplicates = true;
 	bReplicateMovement = true;
 
+	velocity = FVector(0, 0, 0);
+	acceleration = FVector(0, 0, 0);
+	n_position = FVector(0, 0, 0);
+	orientation = GetActorRotation();
+	mass = 10;
+	drag = 0.2;
+	angularDrag = 0.8;
+	elasticity = 0.9;
+
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +33,23 @@ void AActor_Boat::BeginPlay()
 void AActor_Boat::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	int throttle = 200000; //inherited
+	float helm = 0.05; //inherited
+	float turn = helm*angularDrag;
+	orientation.operator+=(FRotator(0,turn,0));
+	SetActorRotation(orientation);
+	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle/mass, sin(orientation.Yaw * PI/180)*throttle / mass,0);
+	velocity.operator*=(1 - drag);
+	velocity.operator+=(acceleration.operator*=(DeltaTime));
+	n_position.operator=(velocity.operator*=(DeltaTime));
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, n_position.ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, velocity.ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, acceleration.ToString());
+	}
+	FVector targetlocation = GetActorLocation();
+	targetlocation.operator+=(n_position);
+	//this should be collision code
+	SetActorLocation(targetlocation);
 }
 
