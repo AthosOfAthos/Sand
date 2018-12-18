@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Engine.h"
+#include "UnrealNetwork.h"
 #include "GameFramework/Actor.h"
 #include "Actor_Boat.generated.h"
 

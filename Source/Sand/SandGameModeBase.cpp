@@ -2,3 +2,7 @@
 
 #include "SandGameModeBase.h"
 
+ASandGameModeBase::ASandGameModeBase()
+{
+	DefaultPawnClass = AChar_Player::StaticClass();
+}

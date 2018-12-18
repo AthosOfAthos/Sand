@@ -3,15 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Player/Char_Player.h"
 #include "GameFramework/GameModeBase.h"
 #include "SandGameModeBase.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SAND_API ASandGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+	ASandGameModeBase();
 };
