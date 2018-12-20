@@ -20,6 +20,11 @@ AActor_Boat::AActor_Boat()
 	angularDrag = 0.8;
 	elasticity = 0.9;
 
+	
+
+	
+	
+
 }
 
 // Called when the game starts or when spawned
@@ -54,12 +59,13 @@ void AActor_Boat::Tick(float DeltaTime)
 	FVector targetlocation = GetActorLocation();
 	targetlocation.operator+=(n_position);
 	//this should be collision code
-	/*
-	if(collision(targetlocation)){
+	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionShape);
+
+	if(isHit){
 		targetlocation.operator+=(n_position.operator*=(-1));
 		velocity.operator*=(-1);
 	}
-	*/
+	
 	SetActorLocation(targetlocation);
 }
 
