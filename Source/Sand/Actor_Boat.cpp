@@ -16,7 +16,7 @@ AActor_Boat::AActor_Boat()
 	n_position = FVector(0, 0, 0);
 	orientation = GetActorRotation();
 	mass = 10;
-	drag = 0.2;
+	drag = 0.8;
 	angularDrag = 0.8;
 	elasticity = 0.9;
 
@@ -38,18 +38,28 @@ void AActor_Boat::Tick(float DeltaTime)
 	float turn = helm*angularDrag;
 	orientation.operator+=(FRotator(0,turn,0));
 	SetActorRotation(orientation);
-	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle/mass, sin(orientation.Yaw * PI/180)*throttle / mass,0);
-	velocity.operator*=(1 - drag);
+	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle/mass, sin(orientation.Yaw * PI/180)*throttle / mass,0);//this is somewhat
+	velocity.operator*=(drag);
 	velocity.operator+=(acceleration.operator*=(DeltaTime));
 	n_position.operator=(velocity.operator*=(DeltaTime));
 	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, n_position.ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, velocity.ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, acceleration.ToString());
+		//if(n_position.Size()>10){
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, acceleration.ToString());
+		//}
+		
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(n_position.Size()));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, velocity.ToString());
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, acceleration.ToString());
 	}
 	FVector targetlocation = GetActorLocation();
 	targetlocation.operator+=(n_position);
 	//this should be collision code
+	/*
+	if(collision(targetlocation)){
+		targetlocation.operator+=(n_position.operator*=(-1));
+		velocity.operator*=(-1);
+	}
+	*/
 	SetActorLocation(targetlocation);
 }
 
