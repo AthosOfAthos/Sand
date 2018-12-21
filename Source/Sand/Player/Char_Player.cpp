@@ -95,12 +95,12 @@ void AChar_Player::Input_UsePressed()
 
 void AChar_Player::Input_UpPressed()
 {
-
+	Interact(1);
 }
 
 void AChar_Player::Input_DownPressed()
 {
-
+	Interact(2);
 }
 
 void AChar_Player::Input_LeftPressed()
@@ -131,7 +131,7 @@ bool AChar_Player::Interact_Validate(int iState)
 void AChar_Player::Interact_Implementation(int iState)
 {
 	FHitResult Hit;
-	FVector EndLocation = FVector(250, 0, 0);
+	FVector EndLocation = FVector(450, 0, 0);
 	EndLocation = GetControlRotation().RotateVector(EndLocation);
 	EndLocation += GetActorLocation();
 	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
@@ -139,7 +139,18 @@ void AChar_Player::Interact_Implementation(int iState)
 	{
 		if (Hit.Actor != nullptr && Hit.Actor->GetClass()->ImplementsInterface(UInterface_Interact::StaticClass()))
 		{
-			IInterface_Interact::Execute_Interact_Use(Cast<UObject>(Hit.Actor));
+			switch (iState)
+			{
+			case 0:
+				IInterface_Interact::Execute_Interact_Use(Cast<UObject>(Hit.Actor));
+				break;
+			case 1:
+				IInterface_Interact::Execute_Interact_Up(Cast<UObject>(Hit.Actor));
+				break;
+			case 2:
+				IInterface_Interact::Execute_Interact_Down(Cast<UObject>(Hit.Actor));
+				break;
+			}
 		}
 	}
 }
