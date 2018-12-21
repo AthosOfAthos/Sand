@@ -19,11 +19,6 @@ AActor_Boat::AActor_Boat()
 	drag = 0.8;
 	angularDrag = 0.8;
 	elasticity = 0.9;
-
-
-	
-	
-
 }
 
 // Called when the game starts or when spawned
@@ -70,8 +65,7 @@ void AActor_Boat::Tick(float DeltaTime)
 		
 	}
 	
-	
-	DrawDebugSphere(GetWorld(), ActorLocation, CollisionShape.GetSphereRadius(), 20, FColor::Purple, true);
+	DrawDebugSphere(GetWorld(), ActorLocation, CollisionShape.GetSphereRadius(), 20, FColor::Purple);
 	
 	SetActorLocation(targetlocation);
 }
