@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Actor_Boat.h"
-
+#include "DrawDebugHelpers.h"
 // Sets default values
 AActor_Boat::AActor_Boat()
 {
@@ -11,7 +11,7 @@ AActor_Boat::AActor_Boat()
 	bReplicates = true;
 	bReplicateMovement = true;
 
-	velocity = FVector(0, 0, 0);
+	velocity = FVector(10, 0, 0);
 	acceleration = FVector(0, 0, 0);
 	n_position = FVector(0, 0, 0);
 	orientation = GetActorRotation();
@@ -20,7 +20,6 @@ AActor_Boat::AActor_Boat()
 	angularDrag = 0.8;
 	elasticity = 0.9;
 
-	
 
 	
 	
@@ -38,33 +37,41 @@ void AActor_Boat::BeginPlay()
 void AActor_Boat::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	int throttle = 200000; //inherited
-	float helm = 0.05; //inherited
+	ActorLocation = GetActorLocation();
+//inherited
 	float turn = helm*angularDrag;
 	orientation.operator+=(FRotator(0,turn,0));
 	SetActorRotation(orientation);
-	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle/mass, sin(orientation.Yaw * PI/180)*throttle / mass,0);//this is somewhat
+	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle/mass, sin(orientation.Yaw * PI/180)*throttle / mass,0);//this is somewhata
 	velocity.operator*=(drag);
-	velocity.operator+=(acceleration.operator*=(DeltaTime));
-	n_position.operator=(velocity.operator*=(DeltaTime));
-	if (GEngine) {
-		//if(n_position.Size()>10){
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, acceleration.ToString());
-		//}
-		
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(n_position.Size()));
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, velocity.ToString());
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, acceleration.ToString());
-	}
-	FVector targetlocation = GetActorLocation();
+	velocity.operator+=(acceleration.operator*(DeltaTime));
+	n_position.operator=(velocity.operator*(DeltaTime));
+	
+	
+	FVector targetlocation = ActorLocation;
 	targetlocation.operator+=(n_position);
-	//this should be collision code
-	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionShape);
 
+	//this should be collision code
+	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
+	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionShape, params);
 	if(isHit){
-		targetlocation.operator+=(n_position.operator*=(-1));
-		velocity.operator*=(-1);
+		if (GEngine) {
+			FVector redirection = FVector();
+			for (auto& Hit : OutHits) {
+				redirection = Hit.ImpactNormal.operator-(FVector(0,0, Hit.ImpactNormal.Z));
+				redirection = redirection.operator*=(velocity.Size());
+			}
+
+			targetlocation=(ActorLocation.operator+(n_position.operator*(-2)));
+			velocity=redirection;
+			orientation = redirection.Rotation();
+			
+		}
+		
 	}
+	
+	
+	DrawDebugSphere(GetWorld(), ActorLocation, CollisionShape.GetSphereRadius(), 20, FColor::Purple, true);
 	
 	SetActorLocation(targetlocation);
 }

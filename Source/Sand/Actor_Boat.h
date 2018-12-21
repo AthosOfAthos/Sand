@@ -32,9 +32,11 @@ private:
 	float drag;
 	float angularDrag;
 	int elasticity;
+	int throttle = 40000; //inherited
+	float helm = 0.05;
 
 	TArray<FHitResult> OutHits;
 	FVector ActorLocation = GetActorLocation();
-	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(500.f);
+	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(200.f);
 
 };
