@@ -33,4 +33,8 @@ private:
 	float angularDrag;
 	int elasticity;
 
+	TArray<FHitResult> OutHits;
+	FVector ActorLocation = GetActorLocation();
+	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(500.f);
+
 };
