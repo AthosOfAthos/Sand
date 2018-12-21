@@ -134,13 +134,12 @@ void AChar_Player::Interact_Implementation(int iState)
 	FVector EndLocation = FVector(250, 0, 0);
 	EndLocation = GetControlRotation().RotateVector(EndLocation);
 	EndLocation += GetActorLocation();
-	FCollisionQueryParams params = FCollisionQueryParams(false);
+	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
 	if (GetWorld()->LineTraceSingleByChannel(Hit, GetActorLocation(), EndLocation, ECC_WorldDynamic, params))
 	{
-		Destroy();
-		if (Hit.Actor->GetClass()->ImplementsInterface(UInterface_Interact::StaticClass()))
+		if (Hit.Actor != nullptr && Hit.Actor->GetClass()->ImplementsInterface(UInterface_Interact::StaticClass()))
 		{
-			Cast<IInterface_Interact>(Hit.Actor)->Interact_Use();
+			IInterface_Interact::Execute_Interact_Use(Cast<UObject>(Hit.Actor));
 		}
 	}
 }
