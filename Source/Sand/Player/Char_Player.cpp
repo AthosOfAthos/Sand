@@ -105,7 +105,7 @@ void AChar_Player::Input_DownPressed()
 
 void AChar_Player::Input_LeftPressed()
 {
-
+	Interact(3);
 }
 
 void AChar_Player::Input_LeftReleased()
@@ -115,7 +115,7 @@ void AChar_Player::Input_LeftReleased()
 
 void AChar_Player::Input_RightPressed()
 {
-
+	Interact(4);
 }
 
 void AChar_Player::Input_RightReleased()
@@ -149,6 +149,12 @@ void AChar_Player::Interact_Implementation(int iState)
 				break;
 			case 2:
 				IInterface_Interact::Execute_Interact_Down(Cast<UObject>(Hit.Actor));
+				break;
+			case 3:
+				IInterface_Interact::Execute_Interact_Left(Cast<UObject>(Hit.Actor));
+				break;
+			case 4:
+				IInterface_Interact::Execute_Interact_Right(Cast<UObject>(Hit.Actor));
 				break;
 			}
 		}
