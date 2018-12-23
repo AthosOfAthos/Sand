@@ -51,6 +51,6 @@ private:
 
 	TArray<FHitResult> OutHits;
 	FVector ActorLocation = GetActorLocation();
-	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(200.f);
+	FCollisionShape CollisionShape = FCollisionShape::MakeBox(FVector(200,200,10));
 
 };
