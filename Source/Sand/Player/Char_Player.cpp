@@ -131,11 +131,13 @@ bool AChar_Player::Interact_Validate(int iState)
 void AChar_Player::Interact_Implementation(int iState)
 {
 	FHitResult Hit;
+	FVector StartLocation = GetActorLocation();
+	StartLocation.Z += 50;
 	FVector EndLocation = FVector(450, 0, 0);
 	EndLocation = GetControlRotation().RotateVector(EndLocation);
-	EndLocation += GetActorLocation();
+	EndLocation += StartLocation;
 	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
-	if (GetWorld()->LineTraceSingleByChannel(Hit, GetActorLocation(), EndLocation, ECC_WorldDynamic, params))
+	if (GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, ECC_WorldDynamic, params))
 	{
 		if (Hit.Actor != nullptr && Hit.Actor->GetClass()->ImplementsInterface(UInterface_Interact::StaticClass()))
 		{

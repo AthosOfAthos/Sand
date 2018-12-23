@@ -54,7 +54,7 @@ void AActor_Boat::Tick(float DeltaTime)
 
 	//this should be collision code
 	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
-	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionShape, params);
+	bool isHit = GetWorld()->SweepMultiByProfile(OutHits, ActorLocation, ActorLocation, FQuat::Identity, "BoatHull", FCollisionShape::MakeBox(FVector(200, 200, 5)), params);
 	if(isHit){
 		if (GEngine) {
 			FVector redirection = FVector();
@@ -71,7 +71,6 @@ void AActor_Boat::Tick(float DeltaTime)
 		
 	}
 	DrawDebugBox(GetWorld(), ActorLocation, CollisionShape.GetBox(), FColor::Green);
-	//if (GEngine) { GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, CollisionShape.GetBox().ToString()); }
 	SetActorLocation(targetlocation);
 }
 void AActor_Boat::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
