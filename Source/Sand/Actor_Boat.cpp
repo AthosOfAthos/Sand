@@ -2,6 +2,7 @@
 
 #include "Actor_Boat.h"
 #include "DrawDebugHelpers.h"
+#include "unrealNetwork.h"
 // Sets default values
 AActor_Boat::AActor_Boat()
 {
@@ -19,6 +20,8 @@ AActor_Boat::AActor_Boat()
 	drag = 0.8;
 	angularDrag = 0.8;
 	elasticity = 0.9;
+	throttle = 40000;
+	helm = 0.05;
 }
 
 // Called when the game starts or when spawned
@@ -68,5 +71,13 @@ void AActor_Boat::Tick(float DeltaTime)
 	DrawDebugSphere(GetWorld(), ActorLocation, CollisionShape.GetSphereRadius(), 20, FColor::Purple);
 	
 	SetActorLocation(targetlocation);
+}
+void AActor_Boat::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AActor_Boat, velocity);
+	DOREPLIFETIME(AActor_Boat, mass);
+	DOREPLIFETIME(AActor_Boat, throttle);
+	DOREPLIFETIME(AActor_Boat, helm);
 }
 

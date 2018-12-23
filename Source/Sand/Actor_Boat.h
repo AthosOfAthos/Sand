@@ -24,16 +24,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 private:
+	UPROPERTY(Replicated)
 	FVector velocity;
 	FVector acceleration;
 	FVector n_position;
 	FRotator orientation;
+	UPROPERTY(Replicated)
 	int mass;
 	float drag;
 	float angularDrag;
 	int elasticity;
-	int throttle = 40000; //inherited
-	float helm = 0.05;
+	UPROPERTY(Replicated)
+	int throttle; 
+	UPROPERTY(Replicated)
+	float helm;
 
 	TArray<FHitResult> OutHits;
 	FVector ActorLocation = GetActorLocation();
