@@ -22,6 +22,9 @@ AActor_Boat::AActor_Boat()
 	elasticity = 0.9;
 	throttle = 40000;
 	helm = 0.05;
+
+	CollisionShape = FCollisionShape::MakeBox(FVector(150,150,150));
+	
 }
 
 // Called when the game starts or when spawned
@@ -67,9 +70,8 @@ void AActor_Boat::Tick(float DeltaTime)
 		}
 		
 	}
-	
-	DrawDebugSphere(GetWorld(), ActorLocation, CollisionShape.GetSphereRadius(), 20, FColor::Purple);
-	
+	DrawDebugBox(GetWorld(), ActorLocation, CollisionShape.GetBox(), FColor::Green);
+	//if (GEngine) { GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, CollisionShape.GetBox().ToString()); }
 	SetActorLocation(targetlocation);
 }
 void AActor_Boat::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
@@ -91,4 +93,9 @@ void AActor_Boat::setThrottle(int newThrottle) {
 }
 void AActor_Boat::setHelm(float newHelm) {
 	helm = newHelm;
+}
+/**Give it the axis of the shape as X Y Z about the center
+*/
+void AActor_Boat::setBox(FVector size) {
+	CollisionShape = FCollisionShape::MakeBox(size);
 }

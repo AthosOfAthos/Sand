@@ -31,6 +31,8 @@ public:
 	void setThrottle(int newThrottle);
 	UFUNCTION(BlueprintCallable, Category = "BoatControl")
 	void setHelm(float newHelm);
+	UFUNCTION(BlueprintCallable, Category = "BoatSetup")
+	void setBox(FVector size);
 private:
 	FVector acceleration;
 	FVector n_position;
@@ -51,6 +53,6 @@ private:
 
 	TArray<FHitResult> OutHits;
 	FVector ActorLocation = GetActorLocation();
-	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(200.f);
+	FCollisionShape CollisionShape;
 
 };
