@@ -80,4 +80,15 @@ void AActor_Boat::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifet
 	DOREPLIFETIME(AActor_Boat, throttle);
 	DOREPLIFETIME(AActor_Boat, helm);
 }
-
+int AActor_Boat::getThrottle() {
+	return throttle;
+}
+float AActor_Boat::getHelm() {
+	return helm;
+}
+void AActor_Boat::setThrottle(int newThrottle) {
+	throttle = newThrottle;
+}
+void AActor_Boat::setHelm(float newHelm) {
+	helm = newHelm;
+}

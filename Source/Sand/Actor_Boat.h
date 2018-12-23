@@ -23,21 +23,31 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(BlueprintCallable, Category = "BoatControl")
+	int getThrottle();
+	UFUNCTION(BlueprintCallable, Category = "BoatControl")
+	float getHelm();
+	UFUNCTION(BlueprintCallable, Category = "BoatControl")
+	void setThrottle(int newThrottle);
+	UFUNCTION(BlueprintCallable, Category = "BoatControl")
+	void setHelm(float newHelm);
 private:
-	UPROPERTY(Replicated)
-	FVector velocity;
 	FVector acceleration;
 	FVector n_position;
-	FRotator orientation;
 	UPROPERTY(Replicated)
-	int mass;
+	FVector velocity;
+	UPROPERTY(Replicated)
+	FRotator orientation;
 	float drag;
 	float angularDrag;
 	int elasticity;
 	UPROPERTY(Replicated)
-	int throttle; 
+	int mass;
+	UPROPERTY(Replicated)
+	int throttle;
 	UPROPERTY(Replicated)
 	float helm;
+
 
 	TArray<FHitResult> OutHits;
 	FVector ActorLocation = GetActorLocation();
