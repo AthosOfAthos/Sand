@@ -23,7 +23,7 @@ AActor_Boat::AActor_Boat()
 	throttle = 40000;
 	helm = 0.05;
 
-	CollisionShape = FCollisionShape::MakeBox(FVector(150,150,150));
+	CollisionShape = FCollisionShape::MakeBox(FVector(200,200,50));
 	
 }
 
@@ -54,7 +54,7 @@ void AActor_Boat::Tick(float DeltaTime)
 
 	//this should be collision code
 	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
-	bool isHit = GetWorld()->SweepMultiByProfile(OutHits, ActorLocation, ActorLocation, FQuat::Identity, "BoatHull", FCollisionShape::MakeBox(FVector(200, 200, 5)), params);
+	bool isHit = GetWorld()->SweepMultiByProfile(OutHits, ActorLocation, ActorLocation, FQuat(orientation), "BoatHull", CollisionShape, params);
 	if(isHit){
 		//What should happen if it hits something?
 		if (GEngine) {
@@ -71,7 +71,7 @@ void AActor_Boat::Tick(float DeltaTime)
 		}
 		
 	}
-	DrawDebugBox(GetWorld(), ActorLocation, CollisionShape.GetBox(), FColor::Green);
+	DrawDebugBox(GetWorld(), ActorLocation, CollisionShape.GetBox(), FQuat(orientation), FColor::Green);
 	SetActorLocation(targetlocation);
 }
 void AActor_Boat::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
@@ -98,4 +98,5 @@ void AActor_Boat::setHelm(float newHelm) {
 */
 void AActor_Boat::setBox(FVector size) {
 	CollisionShape = FCollisionShape::MakeBox(size);
+	
 }
