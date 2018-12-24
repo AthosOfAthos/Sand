@@ -56,6 +56,7 @@ void AActor_Boat::Tick(float DeltaTime)
 	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
 	bool isHit = GetWorld()->SweepMultiByProfile(OutHits, ActorLocation, ActorLocation, FQuat::Identity, "BoatHull", FCollisionShape::MakeBox(FVector(200, 200, 5)), params);
 	if(isHit){
+		//What should happen if it hits something?
 		if (GEngine) {
 			FVector redirection = FVector();
 			for (auto& Hit : OutHits) {
@@ -65,7 +66,7 @@ void AActor_Boat::Tick(float DeltaTime)
 
 			targetlocation=(ActorLocation.operator+(n_position.operator*(-2)));
 			velocity=redirection;
-			orientation = redirection.Rotation();
+			//orientation = redirection.Rotation();
 			
 		}
 		
