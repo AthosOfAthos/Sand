@@ -16,12 +16,12 @@ AActor_Boat::AActor_Boat()
 	acceleration = FVector(0, 0, 0);
 	n_position = FVector(0, 0, 0);
 	orientation = GetActorRotation();
-	mass = 10;
-	drag = 0.8;
-	angularDrag = 0.8;
+	mass = 100;
+	drag = 0.99;
+	angularDrag = 0.9;
 	elasticity = 0.9;
-	throttle = 40000;
-	helm = 0.05;
+	throttle = 1;
+	helm = 0.00;
 
 	CollisionShape = FCollisionShape::MakeBox(FVector(200,200,50));
 	
@@ -39,36 +39,34 @@ void AActor_Boat::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	ActorLocation = GetActorLocation();
-//inherited
 	float turn = helm*angularDrag;
 	orientation.operator+=(FRotator(0,turn,0));
 	SetActorRotation(orientation);
 	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle/mass, sin(orientation.Yaw * PI/180)*throttle / mass,0);//this is somewhata
 	velocity.operator*=(drag);
-	velocity.operator+=(acceleration.operator*(DeltaTime));
-	n_position.operator=(velocity.operator*(DeltaTime));
+	velocity.operator+=(acceleration);
+	n_position.operator=(velocity);
 	
 	
 	FVector targetlocation = ActorLocation;
 	targetlocation.operator+=(n_position);
-
-	//this should be collision code
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, velocity.ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Blue, acceleration.ToString());
+	}
 	FCollisionQueryParams params = FCollisionQueryParams(FName(TEXT("YES")), false, this);
 	bool isHit = GetWorld()->SweepMultiByProfile(OutHits, ActorLocation, ActorLocation, FQuat(orientation), "BoatHull", CollisionShape, params);
 	if(isHit){
 		//What should happen if it hits something?
-		if (GEngine) {
-			FVector redirection = FVector();
-			for (auto& Hit : OutHits) {
-				redirection = Hit.ImpactNormal.operator-(FVector(0,0, Hit.ImpactNormal.Z));
-				redirection = redirection.operator*=(velocity.Size());
-			}
-
-			targetlocation=(ActorLocation.operator+(n_position.operator*(-2)));
-			velocity=redirection;
-			//orientation = redirection.Rotation();
-			
+		FVector redirection = FVector();
+		for (auto& Hit : OutHits) {
+			redirection = Hit.ImpactNormal.operator-(FVector(0,0, Hit.ImpactNormal.Z));
+			redirection = redirection.operator*=(velocity.Size());
 		}
+
+		targetlocation=(ActorLocation.operator+(n_position.operator*(-2)));
+		velocity = redirection;//Really I want to replace code with statement that makes throttle stop for a bit
+			
 		
 	}
 	DrawDebugBox(GetWorld(), ActorLocation, CollisionShape.GetBox(), FQuat(orientation), FColor::Green);
