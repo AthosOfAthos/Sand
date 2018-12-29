@@ -28,7 +28,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BoatControl")
 	float getHelm();
 	UFUNCTION(BlueprintCallable, Category = "BoatControl")
-	void setThrottle(int newThrottle);
+	void setThrottle(float newThrottle);
 	UFUNCTION(BlueprintCallable, Category = "BoatControl")
 	void setHelm(float newHelm);
 	UFUNCTION(BlueprintCallable, Category = "BoatSetup")
@@ -46,7 +46,7 @@ private:
 	UPROPERTY(Replicated)
 	int mass;
 	UPROPERTY(Replicated)
-	int throttle;
+	float throttle;
 	UPROPERTY(Replicated)
 	float helm;
 

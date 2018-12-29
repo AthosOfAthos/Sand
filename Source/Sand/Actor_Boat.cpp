@@ -86,7 +86,7 @@ int AActor_Boat::getThrottle() {
 float AActor_Boat::getHelm() {
 	return helm;
 }
-void AActor_Boat::setThrottle(int newThrottle) {
+void AActor_Boat::setThrottle(float newThrottle) {
 	throttle = newThrottle;
 }
 void AActor_Boat::setHelm(float newHelm) {
