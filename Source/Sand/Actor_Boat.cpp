@@ -17,7 +17,7 @@ AActor_Boat::AActor_Boat()
 	n_position = FVector(0, 0, 0);
 	orientation = GetActorRotation();
 	mass = 100;
-	drag = 0.99;
+	drag = 0.999;
 	angularDrag = 0.9;
 	elasticity = 0.9;
 	throttle = 1;
