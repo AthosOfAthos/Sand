@@ -23,8 +23,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintCallable, Category = "BoatControl")
-	int getThrottle();
+	UFUNCTION(BlueprintCallable, Category = "BoatSetup")
+	float getThrottle();
 	UFUNCTION(BlueprintCallable, Category = "BoatControl")
 	float getHelm();
 	UFUNCTION(BlueprintCallable, Category = "BoatControl")
@@ -33,6 +33,19 @@ public:
 	void setHelm(float newHelm);
 	UFUNCTION(BlueprintCallable, Category = "BoatSetup")
 	void setBox(FVector size);
+	UFUNCTION(BlueprintCallable, Category = "BoatSetup")
+	void setMaxThrottle(float newMaxThrottle);
+	UFUNCTION(BlueprintCallable, Category = "BoatSetup")
+	float getMaxThrottle();
+	//There is a reason we have private variables and it's to stop people like me from doing things like this
+	UPROPERTY(BlueprintReadWrite)
+	float drag;
+	UPROPERTY(BlueprintReadWrite)
+	float angularDrag;
+	UPROPERTY(BlueprintReadWrite)
+	int elasticity;
+	UPROPERTY(BlueprintReadWrite, Replicated)
+	int mass;
 private:
 	FVector acceleration;
 	FVector n_position;
@@ -40,15 +53,11 @@ private:
 	FVector velocity;
 	UPROPERTY(Replicated)
 	FRotator orientation;
-	float drag;
-	float angularDrag;
-	int elasticity;
-	UPROPERTY(Replicated)
-	int mass;
 	UPROPERTY(Replicated)
 	float throttle;
 	UPROPERTY(Replicated)
 	float helm;
+	float maxThrottle;
 
 
 	TArray<FHitResult> OutHits;

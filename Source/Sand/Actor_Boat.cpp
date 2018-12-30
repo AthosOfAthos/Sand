@@ -12,16 +12,17 @@ AActor_Boat::AActor_Boat()
 	bReplicates = true;
 	bReplicateMovement = true;
 
-	velocity = FVector(10, 0, 0);
+	velocity = FVector(0, 0, 0);
 	acceleration = FVector(0, 0, 0);
 	n_position = FVector(0, 0, 0);
 	orientation = GetActorRotation();
-	mass = 100;
-	drag = 0.999;
-	angularDrag = 0.9;
-	elasticity = 0.9;
-	throttle = 1;
+	mass = 1000;
+	drag = 0.001;
+	angularDrag = 0.1;
+	elasticity = 2;
+	throttle = 0;
 	helm = 0.00;
+	maxThrottle = 10;
 
 	CollisionShape = FCollisionShape::MakeBox(FVector(200,200,50));
 	
@@ -39,11 +40,11 @@ void AActor_Boat::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	ActorLocation = GetActorLocation();
-	float turn = helm*angularDrag;
+	float turn = helm*((float)1-angularDrag);
 	orientation.operator+=(FRotator(0,turn,0));
 	SetActorRotation(orientation);
-	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle/mass, sin(orientation.Yaw * PI/180)*throttle / mass,0);//this is somewhata
-	velocity.operator*=(drag);
+	acceleration = FVector(cos(orientation.Yaw* PI / 180)*throttle*maxThrottle/mass, sin(orientation.Yaw * PI/180)*throttle*maxThrottle / mass,0);//this is somewhata
+	velocity.operator*=((float)1 - drag);
 	velocity.operator+=(acceleration);
 	n_position.operator=(velocity);
 	
@@ -65,7 +66,7 @@ void AActor_Boat::Tick(float DeltaTime)
 		}
 
 		targetlocation=(ActorLocation.operator+(n_position.operator*(-2)));
-		velocity = redirection;//Really I want to replace code with statement that makes throttle stop for a bit
+		velocity = redirection*elasticity;//Ok so this is bad physics 
 			
 		
 	}
@@ -80,7 +81,7 @@ void AActor_Boat::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifet
 	DOREPLIFETIME(AActor_Boat, throttle);
 	DOREPLIFETIME(AActor_Boat, helm);
 }
-int AActor_Boat::getThrottle() {
+float AActor_Boat::getThrottle() {
 	return throttle;
 }
 float AActor_Boat::getHelm() {
@@ -92,9 +93,14 @@ void AActor_Boat::setThrottle(float newThrottle) {
 void AActor_Boat::setHelm(float newHelm) {
 	helm = newHelm;
 }
+float AActor_Boat::getMaxThrottle() {
+	return maxThrottle;
+}
+void AActor_Boat::setMaxThrottle(float newMaxThrottle) {
+	maxThrottle = newMaxThrottle;
+}
 /**Give it the axis of the shape as X Y Z about the center
 */
 void AActor_Boat::setBox(FVector size) {
 	CollisionShape = FCollisionShape::MakeBox(size);
-	
 }
