@@ -19,7 +19,7 @@ AActor_Boat::AActor_Boat()
 	mass = 1000;
 	drag = 0.001;
 	angularDrag = 0.1;
-	elasticity = 2;
+	elasticity = 1.1;
 	throttle = 0;
 	helm = 0.00;
 	maxThrottle = 10;
